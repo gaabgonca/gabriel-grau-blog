@@ -1,8 +1,9 @@
 <script>
-	import { afterUpdate, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { titles } from '../data/titles';
 	import { gsap } from 'gsap';
 	import { Observer } from 'gsap/Observer';
+	import { send, receive } from '../lib/transitions/pageCrossfade'
 
 	gsap.registerPlugin(Observer);
 
@@ -16,7 +17,7 @@
 	function generateTitleElement(piece) {
 		const child = document.createElement('a');
 		child.className =
-			'titles absolute top-1/2 left-1/2 z-10 text-2xl hover:text-3xl font-bold text-white hover:text-fuchsia-500 select-none hover:cursor-pointer transition-all w-max '+ piece.type;
+			'titles absolute top-1/2 left-1/2 z-10 text-2xl font-bold text-white select-none hover:cursor-pointer w-max '+ piece.type;
 		child.textContent = piece.title;
 		child.href = `/posts/${piece.slug}`
 		container.appendChild(child);
@@ -62,15 +63,12 @@
 				onHover: () => {
 					try {
 						gsap.killTweensOf(element);
-						gsap.to(element, {
-							zIndex: 20,
-							duration: 0.2
-						})
 						gsap.to(element, { 
 							scale: 1.2,
 							opacity: 1,
+							color: "rgb(217 70 239)",
 							duration: 1, 
-							ease: 'power1.out' });
+							ease: 'circ.out' });
 					} catch (error) {}
 				},
 				onHoverEnd: () => {
@@ -78,6 +76,7 @@
 						gsap.killTweensOf(element);
 						gsap.to(element, {
 							zIndex: 10,
+							color: "rgb(255,255,255)",
 							duration: 0.2
 						})
 						tweenAll(element);
@@ -112,17 +111,18 @@
 	<meta name="description" content="Gabriel Grau Caraballo, Autor de ficción" />
 </svelte:head>
 
-<section class="absolute top-0 left-0 w-full h-full bg-indigo-950">
-	<h1 class="fixed top-8 left-8 z-40 text-2xl text-white">Gabriel Grau Caraballo</h1>
-	<h2 class="fixed top-16 left-8 z-40 text-md text-white">Escribo ficciones (supuestamente)</h2>
+<section class="absolute top-0 left-0 w-full h-full bg-indigo-950" in:receive={{ key: "block" }}
+out:send={{ key: "block" }} >
+	<h1 class="name fixed top-8 left-8 z-40 text-2xl text-white">Gabriel Grau Caraballo</h1>
+	<h2 class="whoami fixed top-16 left-8 z-40 text-md text-white">Escribo ficciones (supuestamente)</h2>
 	<div
 		bind:this={container}
 		id="canvas"
-		class="absolute top-0 left-0 w-full h-full bg-violet-950"
+		class="absolute top-0 left-0 w-full h-full bg-indigo-950"
 	/>
-	<div class="fixed top-8 right-8 w-auto h-auto z-40">
+	<div class="fixed bottom-4 right-4 md:top-8 md:right-8 w-auto h-auto z-40">
 		<div class="flex row items-center justify-end">
-			<button class="text-white hover:text-fuchsia-500 px-4 py-2 border hover:border-fuchsia-500 " on:click={()=> updateFilter("all")}>todos</button><div class="w-8"></div><button class="text-white hover:text-fuchsia-500 px-4 py-2 border hover:border-fuchsia-500"  on:click={()=> updateFilter("story")}>cuentos</button><div class="w-8"></div><button class="text-white hover:text-fuchsia-500 px-4 py-2 border hover:border-fuchsia-500"  on:click={()=> updateFilter("poem")}>poemas</button>
+			<button class="text-white hover:text-fuchsia-500 px-4 py-2 border hover:border-fuchsia-500 " on:click={()=> updateFilter("all")}>todos</button><div class="w-2 md:w-8"></div><button class="text-white hover:text-fuchsia-500 px-4 py-2 border hover:border-fuchsia-500"  on:click={()=> updateFilter("story")}>cuentos</button><div class="w-2 md:w-8"></div><button class="text-white hover:text-fuchsia-500 px-4 py-2 border hover:border-fuchsia-500"  on:click={()=> updateFilter("poem")}>poemas</button>
 		</div>
 	</div>
 </section>

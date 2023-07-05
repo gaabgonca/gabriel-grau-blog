@@ -1,5 +1,9 @@
 <script>
 	import '../app.css';
+	
+	
+ 
+  export let data;
 </script>
 
 <div class="app">
@@ -16,6 +20,7 @@
 		flex-direction: column;
 		height: 100vh;
 		width: 100vw;
+		@apply bg-indigo-950;
 	}
 
 	main {
