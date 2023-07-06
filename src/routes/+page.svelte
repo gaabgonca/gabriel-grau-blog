@@ -137,22 +137,22 @@
 		class="absolute top-0 left-0 w-full h-full bg-stone-200"
 	/>
 	<div class="fixed bottom-4 md:bottom-auto right-4 md:top-8 md:right-8 w-auto z-40">
-		<div class="flex row items-center justify-end">
+		<div class="flex row items-center justify-end bg-stone-200">
 			<button
 				id="all-filter"
-				class="sans-serif flter-btn text-stone-900 bg-stone-200 hover:text-fuchsia-500 px-4 py-2 border hover:border-fuchsia-500"
+				class="sans-serif flter-btn text-stone-900 bg-stone-200 hover:text-fuchsia-500 px-4 py-2"
 				on:click={() => updateFilter('all')}>todos</button
 			>
 			<div class="w-2 md:w-8" />
 			<button
 				id="story-filter"
-				class="sans-serif filter-btn text-stone-900 hover:text-fuchsia-500 bg-stone-200 px-4 py-2 border hover:border-fuchsia-500"
+				class="sans-serif filter-btn text-stone-900 hover:text-fuchsia-500 bg-stone-200 px-4 py-2"
 				on:click={() => updateFilter('story')}>cuentos</button
 			>
 			<div class="w-2 md:w-8" />
 			<button
 				id={'poem-filter'}
-				class="sans-serif filter-btn text-stone-900 hover:text-fuchsia-500 bg-stone-200 px-4 py-2 border hover:border-fuchsia-500"
+				class="sans-serif filter-btn text-stone-900 hover:text-fuchsia-500 bg-stone-200 px-4 py-2"
 				on:click={() => updateFilter('poem')}>poemas</button
 			>
 		</div>
