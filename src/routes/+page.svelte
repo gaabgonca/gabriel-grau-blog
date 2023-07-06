@@ -1,21 +1,24 @@
 <script>
-	import { onMount } from 'svelte';
+	import { getContext, onMount, setContext } from 'svelte';
+    import { writable } from 'svelte/store';
 	import { titles } from '../data/pieces';
 	import { gsap } from 'gsap';
 	import { Observer } from 'gsap/Observer';
 	import { send, receive } from '../lib/transitions/pageCrossfade';
 	import { tweenProperty } from '../lib/animations';
+	import { menuInitialized , titleElements} from '../stores';
 
 	gsap.registerPlugin(Observer);
 
 	let container;
 	let selectedPieces = titles;
-	let titleElements, canvas, stories, poems;
+	let canvas, stories, poems;
+
 
 	function generateTitleElement(piece) {
 		const child = document.createElement('a');
 		child.className =
-			'titles absolute top-1/2 left-1/2 z-10 text-2xl font-bold text-stone-900 select-none hover:cursor-pointer w-max ' +
+			'titles absolute top-1/2 left-1/2 z-10 text-2xl font-bold text-neutral-600 select-none hover:cursor-pointer w-max ' +
 			piece.type;
 		child.textContent = piece.title;
 		child.href = `/posts/${piece.slug}`;
@@ -24,7 +27,7 @@
 
 	function updateFilter(filter) {
 		if (filter === 'all') {
-			titleElements.forEach((element) => (element.style.display = 'flex'));
+			$titleElements.forEach((element) => (element.style.display = 'flex'));
 		} else if (filter === 'poem') {
 			poems.forEach((element) => (element.style.display = 'flex'));
 			stories.forEach((element) => (element.style.display = 'none'));
@@ -35,9 +38,15 @@
 	}
 
 	onMount(() => {
-		selectedPieces.map(generateTitleElement);
+		console.log($menuInitialized);
+		if (!$menuInitialized) {
+			selectedPieces.map(generateTitleElement);
+			titleElements.set(gsap.utils.toArray('.titles'))
+		} else {
+			$titleElements.forEach((element) => (container.appendChild(element)));
+		}
 
-		titleElements = gsap.utils.toArray('.titles');
+		
 		stories = gsap.utils.toArray('.story');
 		poems = gsap.utils.toArray('.poem');
 
@@ -47,13 +56,24 @@
 		// @ts-ignore
 		let canvasHeight = canvas.offsetHeight;
 
-		gsap.set(titleElements, { xPercent: -50, yPercent: -50 });
-
+		if (!$menuInitialized) {
+		gsap.set($titleElements, { xPercent: -50, yPercent: -50 });
+		}
 		// x/y values for how far away from the center they can move
 		var dx = canvasWidth * 0.4;
 		var dy = canvasHeight * 0.5;
 
-		titleElements.forEach(function (element, index) {
+		const isMobile = /Android|iPhone/i.test(navigator.userAgent)
+		const minY = -0.8* dy
+		const maxY = isMobile? 0.8* dy : dy
+
+		$titleElements.forEach(function (element, index) {
+			if(!$menuInitialized) {
+			gsap.set(element, {
+							x: gsap.utils.random(-dx, dx) * 0.7,
+							y: gsap.utils.random(minY, maxY) * 0.7
+						});
+				}
 			Observer.create({
 				target: element,
 				type: 'touch,pointer',
@@ -74,7 +94,7 @@
 						gsap.killTweensOf(element);
 						gsap.to(element, {
 							zIndex: 10,
-							color: '#1c1917',
+							color: '#525252',
 							duration: 0.2
 						});
 						tweenAll(element);
@@ -99,17 +119,18 @@
 		function tweenAll(element) {
 			tweenProperty(element, 'scale', 0.5, 1.2);
 			tweenProperty(element, 'x', -dx, dx);
-			tweenProperty(element, 'y', -dy, dy);
+			tweenProperty(element, 'y', minY, maxY);
 			tweenProperty(element, 'opacity', 0.4, 1);
 		}
 
 		function holdElements() {
-			let tweens = gsap.getTweensOf(titleElements);
+			let tweens = gsap.getTweensOf($titleElements);
 			tweens.forEach((tween) => {
 				tween.pause();
 				gsap.delayedCall(1, () => tween.resume());
 			});
 		}
+		menuInitialized.set(true);
 	});
 </script>
 
@@ -124,10 +145,10 @@
 	out:send={{ key: 'cross-main' }}
 >
 	<div class="w-max h-min absolute top-8 left-8 z-40 bg-stone-200">
-		<h1 class="name sans-serif relative top-0 left-0 z-40 text-2xl text-stone-900">
+		<h1 class="name sans-serif relative top-0 left-0 z-40 text-2xl text-black ">
 			Gabriel Grau Caraballo
 		</h1>
-		<h2 class="whoami sans-serif relative top-0 left-0 z-40 text-md text-stone-900">
+		<h2 class="whoami sans-serif relative top-0 left-0 z-40 text-md text-black">
 			Escribo ficciones (supuestamente)
 		</h2>
 	</div>
@@ -157,4 +178,5 @@
 			>
 		</div>
 	</div>
+		<i class="fixed bottom-4 md:bottom-8 left-4 md:left-8 w-auto z-40 w-4 h-4 fixed fa fa-solid fa-bars scale-150"></i>
 </section>
