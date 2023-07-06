@@ -14,7 +14,7 @@
 		flex-direction: column;
 		height: 100vh;
 		width: 100vw;
-		@apply bg-indigo-950;
+		@apply bg-stone-200;
 	}
 
 	main {

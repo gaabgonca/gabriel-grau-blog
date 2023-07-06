@@ -3,13 +3,13 @@
 @import 'tailwindcss/utilities';
 
 .first-line-indent {
-	@apply text-white;
+	@apply text-stone-900;
 	@apply text-lg;
 	text-indent: 16px;
 }
 
 .western {
-	@apply text-white;
+	@apply text-stone-900;
 	@apply text-lg;
 }
 
