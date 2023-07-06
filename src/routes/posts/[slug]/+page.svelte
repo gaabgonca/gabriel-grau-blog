@@ -27,7 +27,8 @@
 			start: 'top 30',
 			end: 'bottom top',
 			scrub: true,
-			pin: true
+			pin: true,
+			pinType: 'fixed'
 		});
 	});
 </script>
@@ -42,6 +43,7 @@
 		class="fixed sans-serif flex bottom-4 md:bottom-auto right-4 md:top-8 md:right-8 w-auto h-auto z-40"
 	>
 		<a
+			data-sveltekit-noscroll
 			class="flter-btn sans-serif flex text-stone-900 bg-stone-200 hover:text-fuchsia-500 px-4 py-2 border hover:border-fuchsia-500 z-40"
 			style="height: 42px"
 			href="/">volver al inicio</a

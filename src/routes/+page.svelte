@@ -20,6 +20,7 @@
 			piece.type;
 		child.textContent = piece.title;
 		child.href = `/posts/${piece.slug}`;
+		child.setAttribute('data-sveltekit-noscroll', 'true');
 		container.appendChild(child);
 	}
 
@@ -149,7 +150,7 @@
 			Escribo ficciones (supuestamente)
 		</h2>
 	</div>
-	<div bind:this={container} id="canvas" class="absolute top-0 left-0 w-full h-full bg-stone-200" />
+	<div bind:this={container} id="canvas" class="absolute top-0 left-0 w-full h-full bg-stone-200 overflow-hidden" />
 	<div class="fixed bottom-4 md:bottom-auto right-4 md:top-8 md:right-8 w-auto z-40">
 		<div class="flex row items-center justify-end bg-stone-200">
 			<button
