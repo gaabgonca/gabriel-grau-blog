@@ -4,6 +4,7 @@ interface Piece {
 	cssContent?: string;
 	type: 'poem' | 'story';
 	slug: string;
+	html?: string;
 }
 
-export { Piece };
+export { type Piece };

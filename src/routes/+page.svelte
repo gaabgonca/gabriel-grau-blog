@@ -1,9 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
-	import { titles } from '../data/titles';
+	import { titles } from '../data/pieces';
 	import { gsap } from 'gsap';
 	import { Observer } from 'gsap/Observer';
 	import { send, receive } from '../lib/transitions/pageCrossfade';
+	import { tweenProperty } from '../lib/animations';
 
 	gsap.registerPlugin(Observer);
 
@@ -52,7 +53,6 @@
 		var dx = canvasWidth * 0.4;
 		var dy = canvasHeight * 0.5;
 
-		// Animate our properties individually - by osublake
 		titleElements.forEach(function (element, index) {
 			Observer.create({
 				target: element,
@@ -81,7 +81,19 @@
 					} catch (error) {}
 				}
 			});
+
 			tweenAll(element);
+		});
+
+		Observer.create({
+			target: window,
+			onWheel: () => {
+				try {
+					holdElements();
+				} catch (error) {
+					console.log(error);
+				}
+			}
 		});
 
 		function tweenAll(element) {
@@ -91,52 +103,56 @@
 			tweenProperty(element, 'opacity', 0.7, 1);
 		}
 
-		function tweenProperty(target, prop, min, max) {
-			gsap.to(target, {
-				[prop]: gsap.utils.random(min, max),
-				duration: 'random(10, 12)',
-				// @ts-ignore
-				ease: 'power.inOut',
-				onComplete: tweenProperty,
-				onCompleteParams: [target, prop, min, max]
+		function holdElements() {
+			let tweens = gsap.getTweensOf(titleElements);
+			tweens.forEach((tween) => {
+				tween.pause();
+				gsap.delayedCall(1, () => tween.resume());
 			});
 		}
 	});
 </script>
 
 <svelte:head>
-	<title>Gabriel Grau</title>
+	<title>Gabriel Grau Caraballo</title>
 	<meta name="description" content="Gabriel Grau Caraballo, Autor de ficción" />
 </svelte:head>
 
 <section
 	class="absolute top-0 left-0 w-full h-full bg-indigo-950"
-	in:receive={{ key: 'block' }}
-	out:send={{ key: 'block' }}
+	in:receive={{ key: 'cross-main' }}
+	out:send={{ key: 'cross-main' }}
 >
-	<h1 class="name fixed top-8 left-8 z-40 text-2xl text-white">Gabriel Grau Caraballo</h1>
-	<h2 class="whoami fixed top-16 left-8 z-40 text-md text-white">
-		Escribo ficciones (supuestamente)
-	</h2>
+	<div class="w-max h-min absolute top-8 left-8 z-40 bg-indigo-950">
+		<h1 class="name sans-serif relative top-0 left-0 z-40 text-2xl text-white">
+			Gabriel Grau Caraballo
+		</h1>
+		<h2 class="whoami sans-serif relative top-0 left-0 z-40 text-md text-white">
+			Escribo ficciones (supuestamente)
+		</h2>
+	</div>
 	<div
 		bind:this={container}
 		id="canvas"
 		class="absolute top-0 left-0 w-full h-full bg-indigo-950"
 	/>
-	<div class="fixed bottom-4 right-4 md:top-8 md:right-8 w-auto h-auto z-40">
+	<div class="fixed bottom-4 md:bottom-auto right-4 md:top-8 md:right-8 w-auto z-40">
 		<div class="flex row items-center justify-end">
 			<button
-				class="text-white bg-indigo-950 hover:text-fuchsia-500 px-4 py-2 border hover:border-fuchsia-500"
+				id="all-filter"
+				class="sans-serif flter-btn text-white bg-indigo-950 hover:text-fuchsia-500 px-4 py-2 border hover:border-fuchsia-500"
 				on:click={() => updateFilter('all')}>todos</button
 			>
 			<div class="w-2 md:w-8" />
 			<button
-				class="text-white hover:text-fuchsia-500 bg-indigo-950 px-4 py-2 border hover:border-fuchsia-500"
+				id="story-filter"
+				class="sans-serif filter-btn text-white hover:text-fuchsia-500 bg-indigo-950 px-4 py-2 border hover:border-fuchsia-500"
 				on:click={() => updateFilter('story')}>cuentos</button
 			>
 			<div class="w-2 md:w-8" />
 			<button
-				class="text-white hover:text-fuchsia-500 bg-indigo-950 px-4 py-2 border hover:border-fuchsia-500"
+				id={'poem-filter'}
+				class="sans-serif filter-btn text-white hover:text-fuchsia-500 bg-indigo-950 px-4 py-2 border hover:border-fuchsia-500"
 				on:click={() => updateFilter('poem')}>poemas</button
 			>
 		</div>

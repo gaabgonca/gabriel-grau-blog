@@ -8,3 +8,11 @@ body {
 	height: 100%;
 	overflow: hidden;
 }
+
+* {
+	font-family: 'Merriweather', serif;
+}
+
+.sans-serif {
+	font-family: 'Lato', sans-serif;
+}

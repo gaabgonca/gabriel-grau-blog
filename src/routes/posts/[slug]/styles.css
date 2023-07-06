@@ -1,0 +1,35 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.first-line-indent {
+	@apply text-white;
+	@apply text-lg;
+	text-indent: 16px;
+}
+
+.western {
+	@apply text-white;
+	@apply text-lg;
+}
+
+.piece-content {
+	--mask: linear-gradient(
+			to bottom,
+			rgba(0, 0, 0, 0) 0,
+			rgba(0, 0, 0, 1) 10%,
+			rgba(0, 0, 0, 1) 90%,
+			rgba(0, 0, 0, 0) 100%
+		)
+		100% 50% / 100% 100% repeat-x;
+	-webkit-mask: var(--mask);
+	mask: var(--mask);
+}
+
+.spacer {
+	min-height: 80px;
+}
+
+.piece-content > * {
+	@apply leading-loose;
+}

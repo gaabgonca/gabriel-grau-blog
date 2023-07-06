@@ -1,0 +1,89 @@
+* {
+	font-family: 'Merriweather';
+}
+p {
+	line-height: 150%;
+	text-align: left;
+	orphans: 2;
+	widows: 2;
+	margin-bottom: 0.1in;
+	direction: ltr;
+	background: transparent;
+	text-align: justify;
+	text-justify: inter-word;
+}
+p.western {
+	font-family: 'Merriweather';
+	font-size: 1em;
+}
+p.cjk {
+	font-size: 10pt;
+}
+h1 {
+	text-align: left;
+	orphans: 2;
+	widows: 2;
+	margin-bottom: 0.08in;
+	direction: ltr;
+	background: transparent;
+	page-break-after: avoid;
+}
+h1.western {
+	font-family: 'Merriweather';
+	font-size: 1.5em;
+	font-weight: bold;
+}
+h1.cjk {
+	font-family: 'Merriweather';
+	font-size: 1.5em;
+	font-weight: bold;
+}
+h1.ctl {
+	font-size: 24pt;
+	font-weight: bold;
+}
+p.first-line-indent {
+	text-indent: 0.2in;
+	font-family: 'Merriweather';
+	font-size: 1em;
+}
+a:link {
+	color: #000080;
+	text-decoration: underline;
+}
+a:visited {
+	color: #800000;
+	text-decoration: underline;
+}
+p.title {
+	font-size: 3em;
+}
+p.author {
+	font-size: 2em;
+}
+p.align-center {
+	text-align: center;
+}
+p.align-right {
+	text-align: right;
+}
+.big_and_centered {
+	font-size: 5em;
+	top: 50%;
+	bottom: 50%;
+	right: 50%;
+	left: 50%;
+	position: absolute;
+	margin: 0pt !important;
+}
+img {
+	max-width: 100%;
+	height: auto;
+	padding: 3em;
+	box-sizing: border-box;
+}
+
+h1.western {
+	margin-top: 10vh;
+	font-size: 2em;
+}

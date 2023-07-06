@@ -6,4 +6,4 @@ import { quintOut } from 'svelte/easing';
  * This ensures that there is a single instance of the crossfade
  * That allows you to connect element from diffent components and cro
  */
-export const [send, receive] = crossfade({ duration: 1500, easing: quintOut });
+export const [send, receive] = crossfade({ duration: 3000, easing: quintOut });
