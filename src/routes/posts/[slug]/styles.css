@@ -4,13 +4,13 @@
 
 .first-line-indent {
 	@apply text-stone-900;
-	@apply text-lg;
+	@apply text-base;
 	text-indent: 16px;
 }
 
 .western {
 	@apply text-stone-900;
-	@apply text-lg;
+	@apply text-base;
 }
 
 .piece-content {
@@ -31,5 +31,5 @@
 }
 
 .piece-content > * {
-	@apply leading-loose;
+	@apply leading-relaxed;
 }
