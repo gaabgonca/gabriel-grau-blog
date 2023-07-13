@@ -36,6 +36,8 @@
 	"type": "module",
 	"dependencies": {
 		"@vercel/analytics": "^1.0.1",
-		"gsap": "^3.12.2"
+		"dompurify": "^3.0.5",
+		"gsap": "^3.12.2",
+		"isomorphic-dompurify": "^1.8.0"
 	}
 }

@@ -1,5 +1,4 @@
 import { crossfade } from 'svelte/transition';
-import { quintOut } from 'svelte/easing';
 
 /**
  * Creating the crossfade object in a separate javascript file

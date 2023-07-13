@@ -4,21 +4,20 @@
 	import { titles } from '../../data/pieces';
 	import { gsap } from 'gsap';
 	import { Observer } from 'gsap/Observer';
-	import { listInitialized,  listTitleElements,  } from '../../stores';
+	import { listInitialized, listTitleElements } from '../../stores';
 	import { fade } from 'svelte/transition';
 
 	gsap.registerPlugin(Observer);
 
 	let listContainer;
 	let selectedPieces = titles;
-	let  listCanvas, stories, poems;
+	let stories, poems;
 
 	function generateSpacerElement() {
 		const child = document.createElement('div');
-		child.className = "list-spacer w-full"
+		child.className = 'list-spacer w-full';
 		listContainer.appendChild(child);
 	}
-	
 
 	function generateListTitleElement(piece) {
 		const child = document.createElement('a');
@@ -43,30 +42,23 @@
 		}
 	}
 
-
-
-
 	onMount(() => {
 		if (!$listInitialized) {
-			generateSpacerElement()
+			generateSpacerElement();
 			selectedPieces.map(generateListTitleElement);
-			generateSpacerElement()
+			generateSpacerElement();
 			listTitleElements.set(gsap.utils.toArray('.list-titles'));
 		} else {
-			generateSpacerElement()
+			generateSpacerElement();
 			$listTitleElements.forEach((element) => listContainer.appendChild(element));
-			generateSpacerElement()
+			generateSpacerElement();
 		}
 
 		stories = gsap.utils.toArray('.story');
 		poems = gsap.utils.toArray('.poem');
 
-		listCanvas = document.querySelector('#listContainer');
-
-
 		if (!$listInitialized) {
 			$listTitleElements.forEach(function (element) {
-
 				Observer.create({
 					target: element,
 					type: 'touch,pointer',
@@ -75,29 +67,31 @@
 							gsap.killTweensOf(element);
 							gsap.to(element, {
 								opacity: 1,
-                                fontWeight: 900,
-                                // height: "+20px",
+								fontWeight: 900,
+								// height: "+20px",
 								color: 'rgb(217 70 239)',
 								duration: 1,
-								ease: 'circ',
+								ease: 'circ'
 							});
-						} catch (error) {}
+						} catch (error) {
+							console.log(error);
+						}
 					},
 					onHoverEnd: () => {
 						try {
 							gsap.killTweensOf(element);
 							gsap.to(element, {
-                                // height: "+0px",
-                                fontWeight: 700,
+								// height: "+0px",
+								fontWeight: 700,
 								color: '#525252',
-								duration: 0.2,
-                               
+								duration: 0.2
 							});
-						} catch (error) {}
+						} catch (error) {
+							console.log(error);
+						}
 					}
-				})
+				});
 			});
-
 		}
 		listInitialized.set(true);
 	});
@@ -110,7 +104,7 @@
 
 <section
 	class="absolute top-0 left-0 w-full h-full bg-stone-200"
-	transition:fade={{duration: 1000}}
+	transition:fade={{ duration: 1000 }}
 >
 	<div class="w-max h-min absolute top-8 left-8 z-40 bg-stone-200">
 		<h1 class="name sans-serif relative top-0 left-0 z-40 text-2xl text-black">
@@ -120,13 +114,13 @@
 			Escribo ficciones (supuestamente)
 		</h2>
 	</div>
-    <div class="absolute top-0 left-0 w-full h-full pt-28 pb-20 pl-8 md:pt-32 md:pb-32 md:px-20 ">
-	<div
-	bind:this={listContainer}
-	id="listContainer"
-	class={"relative top-0 left-0 w-full h-full bg-stone-200 overflow-scroll flex flex-col masked"}
-/>
-</div>
+	<div class="absolute top-0 left-0 w-full h-full pt-28 pb-20 pl-8 md:pt-32 md:pb-32 md:px-20">
+		<div
+			bind:this={listContainer}
+			id="listContainer"
+			class={'relative top-0 left-0 w-full h-full bg-stone-200 overflow-scroll flex flex-col masked'}
+		/>
+	</div>
 	<div class="fixed bottom-4 md:bottom-auto right-4 md:top-8 md:right-8 w-auto z-40">
 		<div class="flex row items-center justify-end bg-stone-200">
 			<button
@@ -148,8 +142,9 @@
 			>
 		</div>
 	</div>
-	<a href="/" 
+	<a href="/"
 		><i
 			class="fixed bottom-7 md:bottom-8 left-4 md:left-8 w-auto z-40 w-4 h-4 fa fa-solid fa-arrow-left scale-150"
-		/></a>
+		/></a
+	>
 </section>

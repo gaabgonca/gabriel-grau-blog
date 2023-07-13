@@ -5,17 +5,14 @@
 	import { Observer } from 'gsap/Observer';
 	import { fade } from 'svelte/transition';
 	import { tweenProperty } from '../lib/animations';
-	import {  listMode, menuInitialized, titleElements } from '../stores';
-	import { beforeNavigate } from '$app/navigation';
+	import { menuInitialized, titleElements } from '../stores';
 
 	gsap.registerPlugin(Observer);
 
 	let container;
 	let selectedPieces = titles;
-	let canvas, stories, poems;
+	let stories, poems;
 	let dx, minY, maxY;
-
-	
 
 	function generateTitleElement(piece) {
 		const child = document.createElement('a');
@@ -54,7 +51,6 @@
 		tweenProperty(element, 'opacity', 0.5, 1);
 	}
 
-
 	onMount(() => {
 		if (!$menuInitialized) {
 			selectedPieces.map(generateTitleElement);
@@ -66,12 +62,9 @@
 		stories = gsap.utils.toArray('.story');
 		poems = gsap.utils.toArray('.poem');
 
-		canvas = document.querySelector('#canvas');
+		let canvasWidth = container.offsetWidth;
 
-		// @ts-ignore
-		let canvasWidth = canvas.offsetWidth;
-		// @ts-ignore
-		let canvasHeight = canvas.offsetHeight;
+		let canvasHeight = container.offsetHeight;
 
 		if (!$menuInitialized) {
 			gsap.set($titleElements, { xPercent: -50, yPercent: -50 });
@@ -104,7 +97,9 @@
 								duration: 1,
 								ease: 'circ.out'
 							});
-						} catch (error) {}
+						} catch (error) {
+							console.log(error);
+						}
 					},
 					onHoverEnd: () => {
 						try {
@@ -115,7 +110,9 @@
 								duration: 0.2
 							});
 							tweenAll(element, { dx, minY, maxY });
-						} catch (error) {}
+						} catch (error) {
+							console.log(error);
+						}
 					}
 				});
 
@@ -144,7 +141,7 @@
 
 <section
 	class="absolute top-0 left-0 w-full h-full bg-stone-200"
-	transition:fade={{duration: 1000}}
+	transition:fade={{ duration: 1000 }}
 >
 	<div class="w-max h-min absolute top-8 left-8 z-40 bg-stone-200">
 		<h1 class="name sans-serif relative top-0 left-0 z-40 text-2xl text-black">
@@ -160,7 +157,7 @@
 		id="canvas"
 		class="absolute top-0 left-0 w-full h-full bg-stone-200 overflow-hidden"
 	/>
-	
+
 	<div class="fixed bottom-4 md:bottom-auto right-4 md:top-8 md:right-8 w-auto z-40">
 		<div class="flex row items-center justify-end bg-stone-200">
 			<button
@@ -182,8 +179,9 @@
 			>
 		</div>
 	</div>
-	<a href="/list" 
+	<a href="/list"
 		><i
 			class="fixed bottom-7 md:bottom-8 left-4 md:left-8 w-auto z-40 w-4 h-4 fixed fa fa-solid fa-bars scale-150"
-		/></a>
+		/></a
+	>
 </section>

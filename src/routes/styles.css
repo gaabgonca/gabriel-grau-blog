@@ -15,8 +15,6 @@
 	color: var(--color-text);
 }
 
-
-
 p {
 	line-height: 1.5;
 }
@@ -73,5 +71,5 @@ button:focus:not(:focus-visible) {
 }
 
 .gone {
-	display: none
+	display: none;
 }

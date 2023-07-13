@@ -1,13 +1,13 @@
 .list-spacer {
-    min-height: 40px;
+	min-height: 40px;
 }
 
 @media only screen and (max-width: 768px) {
-    /* Media query for smartphones */
-    .list-spacer {
-     min-height: 30px;
-    }
-  }
+	/* Media query for smartphones */
+	.list-spacer {
+		min-height: 30px;
+	}
+}
 
 .masked {
 	--mask: linear-gradient(
