@@ -22,8 +22,13 @@
 	function generateListTitleElement(piece) {
 		const child = document.createElement('a');
 		child.className =
-			'list-titles z-10 text-xl font-bold text-neutral-600 select-none hover:cursor-pointer w-full ' +
+			'list-titles z-10 font-bold text-neutral-600 select-none hover:cursor-pointer w-full ' +
 			piece.type;
+		if (piece.new === true) {
+			child.className += ' text-3xl new-piece z-50';
+		} else {
+			child.className += ' text-xl z-10';
+		}
 		child.textContent = piece.title;
 		child.href = `/posts/${piece.slug}?list=true`;
 		child.setAttribute('data-sveltekit-noscroll', 'true');

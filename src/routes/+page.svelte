@@ -17,8 +17,13 @@
 	function generateTitleElement(piece) {
 		const child = document.createElement('a');
 		child.className =
-			'titles absolute top-1/2 left-1/2 z-10 text-2xl font-bold text-neutral-600 select-none hover:cursor-pointer w-max ' +
+			'titles absolute top-1/2 left-1/2  font-bold text-neutral-600 select-none hover:cursor-pointer w-max ' +
 			piece.type;
+		if (piece.new === true) {
+			child.className += ' text-4xl new-piece z-50';
+		} else {
+			child.className += ' text-2xl z-10';
+		}
 		child.textContent = piece.title;
 		child.href = `/posts/${piece.slug}`;
 		child.setAttribute('data-sveltekit-noscroll', 'true');
@@ -49,6 +54,24 @@
 		tweenProperty(element, 'x', -dx, dx);
 		tweenProperty(element, 'y', minY, maxY);
 		tweenProperty(element, 'opacity', 0.5, 1);
+		if (element.classList.contains('new-piece')) {
+			flashColor(element);
+		}
+	}
+
+	function flashColor(element) {
+		gsap
+			.timeline({ repeat: -1, yoyo: true })
+			.to(element, {
+				color: 'rgb(217 70 239)',
+				duration: 1,
+				ease: 'power1.inOut'
+			})
+			.to(element, {
+				color: '#525252',
+				duration: 1,
+				ease: 'power1.inOut'
+			});
 	}
 
 	onMount(() => {
@@ -107,7 +130,7 @@
 							gsap.to(element, {
 								zIndex: 10,
 								color: '#525252',
-								duration: 0.2
+								duration: 1
 							});
 							tweenAll(element, { dx, minY, maxY });
 						} catch (error) {

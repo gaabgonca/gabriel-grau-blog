@@ -1,6 +1,7 @@
 import type { Piece } from '../types/piece';
 
 export const titles: Piece[] = [
+	{ title: 'Caravan', type: 'story', slug: 'caravan', html: '22-Caravan.html', new: true },
 	{ title: 'Querida', type: 'story', slug: 'querida', html: '0-Querida.html' },
 	{
 		title: 'Delirio de necesidad: quizás me faltas tú o te extraño',
