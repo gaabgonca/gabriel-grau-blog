@@ -1,7 +1,8 @@
 import type { Piece } from '../types/piece';
 
 export const titles: Piece[] = [
-	{ title: 'Caravan', type: 'story', slug: 'caravan', html: '22-Caravan.html', new: true },
+	{ title: 'Carta a un nuevo burro', type: 'story', slug: 'carta-nuevo-burro', html: '23-Carta-nuevo-burro.html', new: true },
+	{ title: 'Caravan', type: 'story', slug: 'caravan', html: '22-Caravan.html' },
 	{ title: 'Querida', type: 'story', slug: 'querida', html: '0-Querida.html' },
 	{
 		title: 'Delirio de necesidad: quizás me faltas tú o te extraño',
@@ -58,5 +59,6 @@ export const titles: Piece[] = [
 		slug: 'un-lunes-de-diciembre',
 		html: '20-UnLunDic.html'
 	},
-	{ title: 'El Viaje', type: 'story', slug: 'el-viaje', html: '21-ElViaje.html' }
+	{ title: 'El Viaje', type: 'story', slug: 'el-viaje', html: '21-ElViaje.html' },
+	
 ];
