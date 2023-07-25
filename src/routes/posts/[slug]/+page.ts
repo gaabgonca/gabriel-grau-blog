@@ -1,4 +1,4 @@
-export const ssr = false;
+export const ssr = true;
 export const csr = true;
 
 import { error } from '@sveltejs/kit';
