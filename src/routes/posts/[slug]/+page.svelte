@@ -1,8 +1,6 @@
 <script>
 	import './styles.css';
-	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
-	import DOMPurify from 'dompurify';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
