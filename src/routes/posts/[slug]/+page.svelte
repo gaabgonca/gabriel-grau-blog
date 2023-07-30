@@ -6,17 +6,6 @@
 
 	/** @type {import('./$types').PageData} */
 	export let data;
-
-	let htmlContent;
-
-	async function fetchHtml(filePath) {
-		const response = await fetch(filePath);
-		return await response.text();
-	}
-
-	onMount(async () => {
-		htmlContent = DOMPurify.sanitize(await fetchHtml(`/raw_pieces/${data.piece.html}`));
-	});
 </script>
 
 <section
@@ -40,7 +29,7 @@
 		class="piece-content absolute overflow-auto md:pr-8 left-8 flex flex-col bottom-16 top-16 justify-start items-start h-4/5 mt-8 w-10/12 md:w-3/5"
 	>
 		<div class="spacer flex w-full">&nbsp;</div>
-		{@html htmlContent || '<h1>No hay contenido</h1>'}
+		{@html data.sanitizedHtml || '<h1>No hay contenido</h1>'}
 		<div class="spacer w-full">&nbsp;</div>
 	</div>
 </section>
