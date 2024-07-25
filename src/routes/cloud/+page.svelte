@@ -1,43 +1,38 @@
 <script>
-	import './styles.css';
 	import { onMount } from 'svelte';
 	import { titles } from '../../data/pieces';
 	import { gsap } from 'gsap';
 	import { Observer } from 'gsap/Observer';
-	import { listInitialized, listTitleElements } from '../../stores';
 	import { fade } from 'svelte/transition';
+	import { tweenProperty } from '../../lib/animations';
+	import { menuInitialized, titleElements } from '../../stores';
 
 	gsap.registerPlugin(Observer);
 
-	let listContainer;
+	let container;
 	let selectedPieces = titles;
 	let stories, poems;
+	let dx, minY, maxY;
 
-	function generateSpacerElement() {
-		const child = document.createElement('div');
-		child.className = 'list-spacer w-full';
-		listContainer.appendChild(child);
-	}
-
-	function generateListTitleElement(piece) {
+	function generateTitleElement(piece) {
 		const child = document.createElement('a');
 		child.className =
-			'list-titles z-10 font-bold text-neutral-600 select-none hover:cursor-pointer w-full ' +
+			'titles absolute top-1/2 left-1/2  font-bold text-neutral-600 select-none hover:cursor-pointer w-max ' +
 			piece.type;
 		if (piece.new === true) {
-			child.className += ' text-3xl new-piece z-50';
+			child.className += ' text-4xl new-piece z-50';
 		} else {
-			child.className += ' text-xl z-10';
+			child.className += ' text-2xl z-10';
 		}
 		child.textContent = piece.title;
-		child.href = `/posts/${piece.slug}?list=true`;
+		child.href = `/posts/${piece.slug}`;
 		child.setAttribute('data-sveltekit-noscroll', 'true');
-		listContainer.appendChild(child);
+		container.appendChild(child);
 	}
 
 	function updateFilter(filter) {
 		if (filter === 'all') {
-			$listTitleElements.forEach((element) => (element.style.display = 'flex'));
+			$titleElements.forEach((element) => (element.style.display = 'flex'));
 		} else if (filter === 'poem') {
 			poems.forEach((element) => (element.style.display = 'flex'));
 			stories.forEach((element) => (element.style.display = 'none'));
@@ -47,23 +42,71 @@
 		}
 	}
 
+	function holdElements() {
+		let tweens = gsap.getTweensOf($titleElements);
+		tweens.forEach((tween) => {
+			tween.pause();
+			gsap.delayedCall(1, () => tween.resume());
+		});
+	}
+	function tweenAll(element, { dx, minY, maxY }) {
+		tweenProperty(element, 'scale', 0.5, 1.2);
+		tweenProperty(element, 'x', -dx, dx);
+		tweenProperty(element, 'y', minY, maxY);
+		tweenProperty(element, 'opacity', 0.5, 1);
+		if (element.classList.contains('new-piece')) {
+			flashColor(element);
+		}
+	}
+
+	function flashColor(element) {
+		gsap
+			.timeline({ repeat: -1, yoyo: true })
+			.to(element, {
+				color: 'rgb(217 70 239)',
+				duration: 1,
+				ease: 'power1.inOut'
+			})
+			.to(element, {
+				color: '#525252',
+				duration: 1,
+				ease: 'power1.inOut'
+			});
+	}
+
 	onMount(() => {
-		if (!$listInitialized) {
-			generateSpacerElement();
-			selectedPieces.map(generateListTitleElement);
-			generateSpacerElement();
-			listTitleElements.set(gsap.utils.toArray('.list-titles'));
+		if (!$menuInitialized) {
+			selectedPieces.map(generateTitleElement);
+			titleElements.set(gsap.utils.toArray('.titles'));
 		} else {
-			generateSpacerElement();
-			$listTitleElements.forEach((element) => listContainer.appendChild(element));
-			generateSpacerElement();
+			$titleElements.forEach((element) => container.appendChild(element));
 		}
 
 		stories = gsap.utils.toArray('.story');
 		poems = gsap.utils.toArray('.poem');
 
-		if (!$listInitialized) {
-			$listTitleElements.forEach(function (element) {
+		let canvasWidth = container.offsetWidth;
+
+		let canvasHeight = container.offsetHeight;
+
+		if (!$menuInitialized) {
+			gsap.set($titleElements, { xPercent: -50, yPercent: -50 });
+		}
+		// x/y values for how far away from the center they can move
+		dx = canvasWidth * 0.4;
+		var dy = canvasHeight * 0.5;
+
+		const isMobile = /Android|iPhone/i.test(navigator.userAgent);
+		minY = -0.8 * dy;
+		maxY = isMobile ? 0.8 * dy : dy;
+
+		if (!$menuInitialized) {
+			$titleElements.forEach(function (element) {
+				gsap.set(element, {
+					x: gsap.utils.random(-dx, dx) * 0.7,
+					y: gsap.utils.random(minY, maxY) * 0.7
+				});
+
 				Observer.create({
 					target: element,
 					type: 'touch,pointer',
@@ -71,12 +114,11 @@
 						try {
 							gsap.killTweensOf(element);
 							gsap.to(element, {
+								scale: 1.2,
 								opacity: 1,
-								fontWeight: 900,
-								// height: "+20px",
 								color: 'rgb(217 70 239)',
 								duration: 1,
-								ease: 'circ'
+								ease: 'circ.out'
 							});
 						} catch (error) {
 							console.log(error);
@@ -86,19 +128,32 @@
 						try {
 							gsap.killTweensOf(element);
 							gsap.to(element, {
-								// height: "+0px",
-								fontWeight: 700,
+								zIndex: 10,
 								color: '#525252',
-								duration: 0.2
+								duration: 1
 							});
+							tweenAll(element, { dx, minY, maxY });
 						} catch (error) {
 							console.log(error);
 						}
 					}
 				});
+
+				tweenAll(element, { dx, minY, maxY });
+			});
+
+			Observer.create({
+				target: window,
+				onWheel: () => {
+					try {
+						holdElements();
+					} catch (error) {
+						console.log(error);
+					}
+				}
 			});
 		}
-		listInitialized.set(true);
+		menuInitialized.set(true);
 	});
 </script>
 
@@ -119,13 +174,13 @@
 			Escribo ficciones (supuestamente)
 		</h2>
 	</div>
-	<div class="absolute top-0 left-0 w-full h-full pt-28 pb-20 pl-8 md:pt-32 md:pb-32 md:px-20">
-		<div
-			bind:this={listContainer}
-			id="listContainer"
-			class={'relative top-0 left-0 w-full h-full bg-stone-200 overflow-scroll flex flex-col masked'}
-		/>
-	</div>
+
+	<div
+		bind:this={container}
+		id="canvas"
+		class="absolute top-0 left-0 w-full h-full bg-stone-200 overflow-hidden"
+	/>
+
 	<div class="fixed bottom-4 md:bottom-auto right-4 md:top-8 md:right-8 w-auto z-40">
 		<div class="flex row items-center justify-end bg-stone-200">
 			<button
@@ -149,7 +204,7 @@
 	</div>
 	<a href="/"
 		><i
-			class="fixed bottom-7 md:bottom-8 left-4 md:left-8 w-auto z-40 w-4 h-4 fa fa-solid fa-arrow-left scale-150"
+			class="fixed bottom-7 md:bottom-8 left-4 md:left-8 w-auto z-40 w-4 h-4 fixed fa fa-solid fa-bars scale-150"
 		/></a
 	>
 </section>
